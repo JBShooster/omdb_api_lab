@@ -6,6 +6,7 @@ $("form").on("submit", function(e){
   	getUserMovie(movieId);
   });
 
+
 function getUserMovie(movie){
   $.ajax({
 	url: "http://www.omdbapi.com/?s=" + movie,
@@ -19,21 +20,33 @@ function getUserMovie(movie){
       $results.html("No results found.");
     } else {
       data.Search.forEach(function (movie){
-        var li = $("<li></li>").text(movie.Title + " " + movie.Year);
+        var li = $("<li></li>").text(movie.Title);
         $results.append(li);
       });
     }
-    // var posterUrl = "http://www.omdbapi.com/?t=" + movie.Title;
-    // $.getJSON(posterUrl, function(data){
-      
-    // })
+    $("ol").on("click","li", function(e){ 
+      console.log( " this:",this);
+      console.log( " parent:",$(this).parent());
+      newMovie = $(this).text();
+      var url= "http://www.omdbapi.com/?t=" + newMovie;
+    $.getJSON(url, function(data){
+      var source = $('#movie-template').html();
+      var template = Handlebars.compile(source);
+      var html = template({movieData: data});
+      $(".container").html(html);
+  });
 
-    // $("<img>").attr("src", 'http://www.omdbapi.com/?t=' + movie);
-    // $('body').on("click", 'li', function(movie){
-    //   $('body').append(poster);
-    // });
+
+});
 	}
   });
 }
 
+
 });
+
+
+
+
+
+
